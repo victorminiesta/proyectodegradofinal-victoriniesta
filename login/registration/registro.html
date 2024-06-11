@@ -1,0 +1,24 @@
+{% extends 'torneosonline/base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center login-container">
+            <div class="col-md-6 col-sm-8">
+                <div class="card" style="background-color:#1F2833; color:#C5C6C7;">
+                    <div class="card-header">
+                        <h4 class="text-center">Crear Usuario</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{form}}<br>
+                            <button type="submit" class="btn btn-primary text-center">Registrarse</button>
+                            <a href="{%url 'Videojuegos'%}" class="btn btn-danger">Volver</a>
+                        </form><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    

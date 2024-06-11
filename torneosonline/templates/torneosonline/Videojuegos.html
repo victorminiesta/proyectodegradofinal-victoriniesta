@@ -1,0 +1,79 @@
+{% extends 'torneosonline/base.html' %}
+{% block content %}
+    <div class="container-fluid pb-2" style="background-color: #1F2833; border-radius: 8px;"><br>
+        {% if success_message %}
+            <div class="alert alert-success" role="alert">
+                {{ success_message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cierra el Mensaje."></button>
+            </div>
+        {% endif %}
+        <div class="row">
+            {%if request.user.is_staff%}
+                <div class="col-md-6">
+                    <h4 class="pt-2"><a href="{% url 'AdministracionPrincipal' %}" style="text-decoration: none;">Acceder a la Administración</a></h4>
+                </div> 
+            {% endif %}
+            {% if request.user.is_authenticated and request.user.is_staff%}
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-end align-items-center me-4">
+                        <P class="text-end fs-3 pt-2">Bienvenido </P>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle fs-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #1F2833; border-color: #1F2833; color: #C5C6C7;">
+                                {{ request.user.username }}  <img src="{{request.user.imagen.url}}" alt="Imagen de Perfil" style="width:50px; height:50px;">
+                            </button>
+                            <ul class="dropdown-menu fs-5">
+                                <li><a class="dropdown-item" href="{% url 'Perfil' %}">Ver Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Salir <i class="bi bi-box-arrow-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {%elif request.user.is_authenticated and not request.user.is_staff%}
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <h3 class="text-end">Bienvenido </h3>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle fs-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #1F2833; border-color: #1F2833; color: #C5C6C7;">
+                                {{ request.user.username }}  <img src="{{request.user.imagen.url}}" alt="Imagen de Perfil" style="width:40px; height:40px;">
+                            </button>
+                            <ul class="dropdown-menu fs-5">
+                                <li><a class="dropdown-item" href="{% url 'Perfil' %}">Ver Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Salir <i class="bi bi-box-arrow-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-start align-items-start">
+                        <h4 class="mt-4 me-4"><a href="{% url 'login' %}" style="text-decoration: none;">Iniciar sesión</a></h4>
+                        <h4 class="mt-4"><a href="{% url 'Registro' %}" style="text-decoration: none;">Registrarse</a></h4>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container mt-5 contenedor" style="background-color: #1F2833; border-radius: 8px;">
+        <h1>Juegos Disponibles</h1>
+        <div class="row">
+            {% for videojuego in videojuegos %}
+                <div class="col-md-3 mb-4 mt-4">
+                    <div id="colVideojuego">
+                        <!--  Idea: Usar la función slugify para que en la url los espacios en las palabras salga con un guión. Ej: call-of-duty  -->
+                        <a href="{% url 'Torneos' nombre=videojuego.nombre|slugify %}" id="btnInscribirse" style="text-decoration: none;">
+                            <div class="card" id="cardVideojuego" style="background-image: url({{videojuego.imagen.url}}); background-size: cover; width: 100%; height: 200px">
+                            </div>
+                        </a>
+                        <div id="nombreJuego" class="text-center">
+                            <h5>{{videojuego}}</h5>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-center"><a href="{% url 'CrearTorneosUsuarios' nombre=videojuego|slugify%}" style="text-decoration: none;">Crear un torneo de {{videojuego}}</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
+    

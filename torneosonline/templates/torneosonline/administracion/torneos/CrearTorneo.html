@@ -1,0 +1,23 @@
+{% extends "torneosonline/base.html" %}
+
+{% block content %}
+    <div class="container contenedor mt-5">
+        <div class="row justify-content-center login-container">
+            <div class="col-md-6 col-sm-8">
+                <div class="card" style="background-color:#1F2833; color:#C5C6C7;">
+                    <div class="card-header">
+                        <h4 class="text-center">Crear Torneo</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary me-1">Crear</button>
+                            <a href="{%url 'AdministrarTorneos'%}"><button type="button" class="btn btn-danger">Volver</button></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

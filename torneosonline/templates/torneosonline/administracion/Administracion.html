@@ -1,0 +1,27 @@
+{% extends "torneosonline/base.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="container contenedor" style="background-color: #1F2833; border-radius: 8px">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="display-4 mb-4">Bienvenido a la administración de Torneos Online</h1>
+                    <p class="lead">Por favor, seleccione una de las siguientes opciones:</p>
+                    <div class="row justify-content-center pb-2">
+                        <div class="col-6">
+                            <a href="{% url 'AdministrarTorneos'%}" class="btn btn-proyecto btn-lg btn-block">Administrar Torneos</a><br><br>
+                            <a href="{% url 'AdministrarVideojuegos'%}" class="btn btn-proyecto btn-lg btn-block">Administrar Videojuegos</a><br><br>
+                            <a href="{% url 'AdministrarUsuarios'%}" class="btn btn-proyecto btn-lg btn-block">Administrar Usuarios</a><br><br>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center pb-2">
+                        <div class="col-6">
+                            <a href="{% url 'Videojuegos'%}" class="btn btn-proyecto btn-lg btn-block">Volver a la Página Principal</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    

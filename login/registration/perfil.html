@@ -1,0 +1,33 @@
+{% extends 'torneosonline/base.html' %}
+
+
+{% block content %}
+    <div class="container mt-5 contenedor">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-8">
+                <div class="card" style="background-color:#1F2833; color:#C5C6C7;">
+                    <div class="card-header text-center w-100">
+                       <img src="{{request.user.imagen.url}}" alt="Imagen de Perfil" class="w-50">
+                    </div>
+                    <div class="card-body">
+                        <h2 class="text-center">{{request.user.username}}</h2>
+                        <h3>Nombre: {% if request.user.nombre == "" %} No completado. {% else %} {{request.user.nombre}}{% endif %}</h3>
+                        <h3>Apellidos: {% if request.user.apellidos == "" %}  No completado. {% else %} {{request.user.apellidos}}{% endif %}</h3>
+                        <h4>Correo electrónico: {{request.user.email}}</h4>
+                        {%if numeroAmonestaciones > 0%}
+                            <h4>Número de amonestaciones: {{numeroAmonestaciones}}</h4>
+                            <p class="text-danger fs-4"><strong>¡Advertencia!</strong> Un número elevado de sanciones pueden dar lugar a la restricción del acceso a los torneos.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center text-center">
+            <div class ="col-md-6">
+                <a href="{%url 'EditarPerfil' pk=request.user.pk%}"><button type="button" class="btn btn-proyecto mt-2">Editar Perfil</button></a>
+                <a href="{%url 'Videojuegos'%}"><button type="button" class="btn btn-proyecto text-end mt-2">Volver</button></a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    

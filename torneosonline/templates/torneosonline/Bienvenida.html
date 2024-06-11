@@ -1,0 +1,24 @@
+{% extends "torneosonline/base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center " style="height: 100vh;">
+    <div class="container text-center contenedor" id="contenedorBienvenida" style="background-color: #1F2833; border-radius: 8px">
+        <div class="jumbotron">
+            <h1 class="display-4">¡Bienvenido a la Aplicación de Torneos Online!</h1>
+            <p class="lead fs-5">Regístrate ahora para vivir la emoción de la competencia y demostrar tus habilidades.</p>
+            <a href="{% url 'Videojuegos'%}" id="btnInscribirse" class="btn btn-proyecto btn-lg mt-3">¡Inscríbete Ahora!</a>
+        </div>
+        <p class="mt-4 fs-4">Conviértete en un competidor de élite y enfrenta a jugadores de todo el mundo en una variedad de emocionantes torneos.</p>
+        <p class="fs-4">En nuestra plataforma, encontrarás una amplia selección de videojuegos populares y la oportunidad de demostrar tu destreza en el campo de juego.</p>
+        <h5 class="text-danger fs-4"><strong>¡Recuerda!</strong> La integridad y el respeto son fundamentales. Las infracciones a las reglas pueden resultar en penalizaciones.</h5>
+        {% if request.user.is_staff %}
+            <hr class="my-4">
+            <h4><a href="{% url 'AdministracionPrincipal' %}" style="text-decoration: none;">Acceder a la Administración</a></h4>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
+
+

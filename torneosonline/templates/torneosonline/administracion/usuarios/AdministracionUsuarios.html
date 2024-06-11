@@ -1,0 +1,139 @@
+{% extends 'torneosonline/base.html' %}
+
+
+{% block content %}
+<div class="container contenedor mt-5" style="background-color: #1F2833; border-radius: 8px;">
+    <h1 class="text-light text-center">Usuarios</h1>
+    <a href="{%url 'CrearUsuariosAdministrador'%}" style="text-decoration:none;"><button class="btn btn-proyecto mb-4">Crear Nuevo Usuario</button></a>
+    <a href="{%url 'CrearAmonestacion'%}" style="text-decoration:none;"><button class="btn btn-proyecto mb-4">Crear Amonestación</button></a>
+    <a href="{%url 'Amonestaciones'%}" style="text-decoration:none;"><button class="btn btn-proyecto mb-4">Ver Amonestaciones</button></a>
+    <div class="row">
+        <table id="tablaUsuarios" class="display text-center" style="width:100%">
+            <thead>
+                <tr class="text-center">
+                    <th class="text-center">Imagen de Perfil</th>
+                    <th class="text-center">Nombre de Usuario</th>
+                    <th class="text-center">Correo Electrónico</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Apellidos</th>
+                    <th class="text-center">Administrador</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr class="text-center">
+                    <td class="text-center"><img src="{{ usuario.imagen.url }}" alt="{{ usuario.username }}" width="50" height="50"></td>
+                    <td class="text-center">{{ usuario.username }}</td>
+                    <td class="text-center">{{ usuario.email }}</td>
+                    <!-- Los campos con None los sustituyo por un campo vacío -->
+                    <td class="text-center">{{ usuario.nombre|default_if_none:"" }}</td>
+                    <td class="text-center">{{ usuario.apellidos|default_if_none:"" }}</td>
+                    <td class="text-center">{{ usuario.is_staff }}</td>
+                    <td class="text-center"><a href="{%url 'EditarUsuarioAdministracion' pk=usuario.pk%}"><button class="btn btn-primary mb-4">Editar</button></a>
+                    <button class="btn btn-danger mb-4 btnEliminar" id="{{usuario.pk}}">Eliminar</button></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No hay usuarios disponibles actualmente.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div><br>
+    <a href="{% url 'AdministracionPrincipal'%}"><button class="btn btn-proyecto mb-4">Volver a la Administración principal</button></a>
+</div>
+{% endblock content %}
+
+
+{% block js %}
+<script>
+    let botonEliminar = document.querySelectorAll(".btnEliminar");
+
+    botonEliminar.forEach(function(boton) {
+        boton.addEventListener("click", function() {
+            let usuarioId = boton.id;
+
+            if (usuarioId == {{request.user.pk}}){
+                if(confirm("Advertencia estás a punto de eliminar a tu propio usuario, ¿Deseás continuar?")){
+                    fetch('usuarios/eliminar/' + usuarioId, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        }    
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            window.location.href = "{% url 'Bienvenida' %}";
+                        }
+                        else{
+                            alert("No se pudo eliminar al usuario.");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("Error: " + error);
+                        alert("No se pudo eliminar al usuario.");
+                    });
+                }
+            }
+            else{
+                if(confirm("¿Estás seguro de que deseas eliminar este usuario?")){
+                
+                    fetch('usuarios/eliminar/' + usuarioId, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        }    
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            window.location.href = "{% url 'AdministrarUsuarios' %}";
+                        }
+                        else{
+                            alert("No se pudo eliminar al usuario.");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("Error: " + error);
+                        alert("No se pudo eliminar al usuario.");
+                    });
+                }
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $('#tablaUsuarios').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/2.0.5/i18n/es-ES.json'
+            },
+            deferRender: true,
+            processing: true,
+            columns: [
+                null,null,null,null,null,null, {"searchable": false, "orderable": false}
+            ],
+            responsive: true
+        });
+    });
+
+    // itero cada fila y celda de la tabla, verifico si las celdas están vacías y las reemplazo con "No Completado"
+    document.querySelectorAll('#tablaUsuarios tbody tr').forEach((row) => {
+        row.querySelectorAll('td').forEach((cell, index) => {
+            if (index === 3 || index === 4) {
+                if (cell.textContent.trim() === "") {
+                    cell.textContent = "No completado";
+                }
+            }
+            if (index === 5) {
+                if (cell.textContent.trim() === "True") {
+                    cell.textContent = "Sí";
+                }
+                else{
+                    cell.textContent = "No";
+                }
+            }
+        });
+    });
+</script>
+{% endblock js %}
+    

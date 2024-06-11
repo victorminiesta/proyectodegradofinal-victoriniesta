@@ -1,0 +1,40 @@
+{% extends 'torneosonline/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card" style="background-color:#1F2833; color:#C5C6C7;">
+                <div class="card-header">
+                    <h4 class="text-center">Crear Torneo</h4>
+                </div>
+                <div class="card-body text-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="form-group">
+                            <label for="id_inscribirse_propio">¿Desea inscribirse a su propio torneo?</label>
+                            <input type="checkbox" id="inscribirsePropio" name="inscribirsePropio">
+                        </div>
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="{% url 'Videojuegos'%}" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    li{
+        list-style-type: none;
+        color: red;
+    }
+    label{
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock content %}
+    

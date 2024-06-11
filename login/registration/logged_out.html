@@ -1,0 +1,19 @@
+{% extends "torneosonline/base.html" %}
+
+{% block content %}
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h2 class="card-title">Sesión cerrada</h2>
+                        <a href="{% url 'Bienvenida'%}" class="btn btn-primary">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock content %}

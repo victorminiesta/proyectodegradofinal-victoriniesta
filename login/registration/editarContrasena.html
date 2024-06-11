@@ -1,0 +1,25 @@
+{% extends 'torneosonline/base.html' %}
+
+
+{% block content %}
+
+<div class="container contenedor" style="background-color:#1F2833; color:#C5C6C7;">
+    <h2 class="mt-5">Cambiar Contraseña</h2>
+    <form method="post" class="mt-3">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}<br>
+                {{ field }}<br><br>
+                {% for error in field.errors %}
+                    <small class="form-text text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{%url 'Perfil'%}"><button type="button" class="btn btn-danger">Cancelar</button></a>
+    </form>
+</div>
+    
+{% endblock content %}
+    

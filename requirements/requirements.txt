@@ -1,0 +1,4 @@
+django~=4.2.9
+pillow~=10.1.0
+mysqlclient~=2.2.4
+django-crontab~=0.7.1

@@ -1,0 +1,31 @@
+{% extends 'torneosonline/base.html' %}
+
+{% block content %}
+
+    <div>
+        <div class="container contenedor mt-3" style="background-color: #1F2833; border-radius: 8px">
+            <div class="row text-center">
+                <div class="col-12">
+                    <h3>{{torneo.nombre}}</h3>
+                    {%if not partida%}
+                        <h5>El torneo comenzará el {{torneo.fecha}}</h5>
+                    {%else%}
+                        <a href="{% url 'Partida' nombre=torneo.videojuego id=torneo.id%}"><button class="btn btn-proyecto">Volver</button></a>
+                    <h5>Número de Jugadores: {{torneo.usuarios.count}}/{{torneo.numerojugadores}}</h5>
+                    <h5>Usuarios Inscritos:</h5> 
+                    <ul>
+                        {%for usuario in usuarios%}
+                            <h5><li style="list-style-type: none;">-{{usuario.username}}.</li></h5>
+                        {%empty%}
+                            <p>No hay usuarios inscritos.</p>
+                        {% endfor %}
+                    </ul>
+                    </h5>
+                    <p><Strong>Videojuego:</Strong> {{torneo.videojuego}}</p>
+                    <a href="{% url 'Torneos' nombre=torneo.videojuego%}"><button class="btn btn-proyecto">Volver</button></a>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+{% endblock content %}

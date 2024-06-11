@@ -1,0 +1,23 @@
+{% extends "torneosonline/base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center login-container">
+            <div class="col-md-6 col-sm-8">
+                <div class="card" style="background-color:#1F2833; color:#C5C6C7;">
+                    <div class="card-header">
+                        <h5 class="text-start">Añadir Videojuego</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary me-1">Aceptar</button>
+                            <a href="{%url 'AdministrarVideojuegos'%}"><button type="button" class="btn btn-danger">Volver</button></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

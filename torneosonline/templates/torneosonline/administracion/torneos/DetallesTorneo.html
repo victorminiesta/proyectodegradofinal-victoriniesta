@@ -1,0 +1,26 @@
+{% extends "torneosonline/base.html" %}
+
+{% block content %}
+{% comment %} class="d-flex justify-content-center align-items-center" {% endcomment %}
+    <div>
+        <div class="container contenedor mt-3" style="background-color: #1F2833; border-radius: 8px">
+            <div class="row text-center">
+                <div class="col-12">
+                    <h3>{{torneo.nombre}}</h3>
+                    <p><Strong>Fecha:</Strong> {{torneo.fecha}}</p>
+                    <p><Strong>Número de Jugadores:</Strong> {{torneo.numerojugadores}}</p>
+                    <p><Strong>Usuarios Inscritos:</Strong> 
+                        {%for usuario in usuarios%}
+                            <li>{{usuario.username}}</li>
+                        {%empty%}
+                            <p>No hay usuarios inscritos.</p>
+                        {% endfor %}
+                    </p>
+                    <p><Strong>Videojuego:</Strong> {{torneo.videojuego}}</p>
+                    <a href="{% url 'AdministrarTorneos'%}"><button class="btn btn-proyecto">Volver</button></a>
+                </div>
+            </div>
+        </div>
+    </div>  
+{% endblock content %}
+    

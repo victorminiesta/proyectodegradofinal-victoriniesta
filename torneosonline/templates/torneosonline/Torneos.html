@@ -1,0 +1,149 @@
+{% extends "torneosonline/base.html" %}
+
+{% block content %}
+    <div class="container-fluid pb-2" style="background-color: #1F2833; border-radius: 8px;"><br>
+        {% if success_message %}
+            <div class="alert alert-success" role="alert">
+                {{ success_message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cierra el Mensaje."></button>
+            </div>
+        {% endif %}
+        <div class="row">
+            {%if request.user.is_staff%}
+                <div class="col-md-6">
+                    <h4><a href="{% url 'AdministracionPrincipal' %}" style="text-decoration: none;">Acceder a la Administración</a></h4>
+                </div> 
+            {% endif %}
+            {% if request.user.is_authenticated and request.user.is_staff%}
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <h3 class="text-end">Bienvenido </h3>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle fs-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #1F2833; border-color: #1F2833; color: #C5C6C7;">
+                                {{ request.user.username }}  <img src="{{request.user.imagen.url}}" alt="Imagen de Perfil" style="width:40px; height:40px;">
+                            </button>
+                            <ul class="dropdown-menu fs-5">
+                                <li><a class="dropdown-item" href="{% url 'Perfil' %}">Ver Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Salir <i class="bi bi-box-arrow-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {%elif request.user.is_authenticated and not request.user.is_staff%}
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <h3 class="text-end">Bienvenido </h3>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle fs-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #1F2833; border-color: #1F2833; color: #C5C6C7;">
+                                {{ request.user.username }}  <img src="{{request.user.imagen.url}}" alt="Imagen de Perfil" style="width:40px; height:40px;">
+                            </button>
+                            <ul class="dropdown-menu fs-5">
+                                <li><a class="dropdown-item" href="{% url 'Perfil' %}">Ver Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Salir <i class="bi bi-box-arrow-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-md-6">
+                    <h4 class="mt-4"><a href="{% url 'login' %}" style="text-decoration: none;">Iniciar sesión</a></h4>
+                    <h4 class="mt-4"><a href="{% url 'Registro' %}" style="text-decoration: none;">Registrarse</a></h4>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container contenedor mt-5 " style="background-color: #1F2833; border-radius: 8px;">
+        <h1 class="text-light">Torneos Abiertos</h1>
+        <div class="row">
+            {% for torneo in torneos %}
+                <div class="col-md-3 p-5 text-center">
+                        <h3>{{torneo.nombre}}</h3>
+                        <h4>{{torneo.usuarios.count}}/{{torneo.numerojugadores}}</h4>
+                        <a href="{% url 'DetallesTorneo' pk=torneo.pk nombre=torneo.videojuego%}" class="text-center"><button type="button" class="btn btn-proyecto text-center mb-4">Más Información</button></a>
+                        {% if request.user in torneo.usuarios.all %}
+                            <button type="button" class="btn btn-danger text-center btnDesinscribirse" nombreTorneo="{{torneo.nombre}}" id="{{ torneo.id }}">Cancelar Inscripción</button>
+                        {% elif torneo.usuarios.count == torneo.numerojugadores %}
+                            <p>Este torneo ya ha llegado a su límite de jugadores.</p>
+                        {% elif torneo.fecha < fechaActual %}
+                            <h5 class="text-center">El torneo ya ha comenzado</h5>
+                        {% elif torneo.fecha|timeuntil:fechaActual <= '0:30:00' %}
+                            <p>Inscripciones cerradas para este torneo</p>
+                        {% else %}
+                            <button type="button" class="btn btn-proyecto text-center btnInscribirse {{torneo.nombre}}" nombreTorneo="{{torneo.nombre}}" id="{{ torneo.id }}">Inscribirse</button>
+                        {% endif %}
+                        {%if torneo.creador %}
+                            <h5 class="text-center mt-3">Creado por {{torneo.creador}}</h5>
+                        {%endif%}
+                </div>
+            {%empty%}
+                <h3>No hay Torneos Disponibles Actualmente.</h3>
+            {% endfor %}
+        </div>
+        <a href="{%url 'Videojuegos'%}"><button type="button" class="btn btn-proyecto mt-3">Volver</button></a>
+    </div>
+{% endblock content %}
+
+
+{% block js %}
+    <script>
+        const botonesInscribirse = document.querySelectorAll('.btnInscribirse');
+        const botonesDesinscribirse = document.querySelectorAll('.btnDesinscribirse');
+
+        botonesInscribirse.forEach(boton => {
+            boton.addEventListener('click', () => {
+                const torneoId = boton.id;
+                const nombreTorneo = boton.getAttribute('nombreTorneo');
+
+                fetch('/torneos/inscribirse/'+torneoId, {
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    }
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        if (confirm(`Estas a punto de inscribirte al torneo ${nombreTorneo}. Deseas continuar?`)) {
+                            window.location.href = "{% url 'Videojuegos' %}";
+                        }
+                    }
+                    else{
+                        alert("Error al intentar inscribirse al torneo, intentelo de nuevo más tarde.");
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error: " + error);
+                    alert("Error al intentar inscribirse al torneo, intentelo de nuevo más tarde.");
+                });
+            })
+        })
+
+        botonesDesinscribirse.forEach(boton => {
+            boton.addEventListener('click', () => {
+                const torneoId = boton.id;
+                const nombreTorneo = boton.getAttribute('nombreTorneo');
+                
+                fetch('/torneos/desinscribirse/'+torneoId, {
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    }
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        if (confirm(`Estas a punto de cancelar tu inscripción al torneo ${nombreTorneo}. Deseas continuar?`)) {
+                            window.location.href = "{% url 'Videojuegos' %}";
+                        }
+                    }
+                    else{
+                        alert("Error al intentar desinscribirse al torneo, intentelo de nuevo más tarde.");
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error: " + error);
+                    alert("Error al intentar desinscribirse al torneo, intentelo de nuevo más tarde.");
+                });
+            })
+        })
+    </script>
+{% endblock js %}
+    

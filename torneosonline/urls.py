@@ -1,0 +1,32 @@
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('', Bienvenida, name="Bienvenida"),
+    path('videojuegos', Videojuegos.as_view(), name="Videojuegos"),
+    path('<nombre>/Torneos', Torneos.as_view(), name="Torneos"),
+    path('<nombre>/Torneos/<int:pk>', DetallesTorneos.as_view(), name="DetallesTorneo"),
+    path('<nombre>/Torneos/crear', CrearTorneosUsuarios.as_view(), name="CrearTorneosUsuarios"),
+    path('administracion', Administracion, name="AdministracionPrincipal"),
+    path('administracion/torneos', AdministrarTorneos.as_view(), name="AdministrarTorneos"),
+    path('administracion/torneos/<int:pk>', DetallesTorneoAdministracion.as_view(), name="DetallesTorneoAdministracion"),
+    path('administracion/torneos/eliminar/<int:pk>', EliminarTorneos, name="EliminarTorneos"),
+    path('administracion/torneos/crear', CrearTorneos.as_view(), name="CrearTorneos"),
+    path('administracion/torneos/editar/<int:pk>', EditarTorneos.as_view(), name="EditarTorneo"),
+    path('administracion/videojuegos', AdministrarVideojuegos.as_view(), name="AdministrarVideojuegos"),
+    path('administracion/videojuegos/crear', CrearVideojuego.as_view(), name="CrearVideojuegos"),
+    path('administracion/videojuegos/editar/<int:pk>', EditarVideojuego.as_view(), name="EditarVideojuegos"),
+    path('administracion/videojuegos/eliminar/<int:pk>', EliminarVideojuegos, name="EliminarVideojuegos"),
+    path('administracion/usuarios', AdministrarUsuarios.as_view(), name="AdministrarUsuarios"),
+    path('administracion/usuarios/crear', CrearUsuarioAdministracion.as_view(), name="CrearUsuariosAdministrador"),
+    path('administracion/usuarios/amonestaciones', Amonestaciones.as_view(), name="Amonestaciones"),
+    path('administracion/usuarios/crearAmonestacion', CrearAmonestacion.as_view(), name="CrearAmonestacion"),
+    path('administracion/usuarios/editar/<int:pk>', EditarUsuarioAdministracion.as_view(), name="EditarUsuarioAdministracion"),
+    path('administracion/usuarios/eliminar/<int:pk>', EliminarUsuario, name="EliminarUsuario"),
+    path('Registro', register, name="Registro"),
+    path('Perfil', Perfil.as_view(), name="Perfil"),
+    path('Perfil/<int:pk>', EditarPerfil.as_view(), name="EditarPerfil"),
+    path("Perfil/EditPass", EditarContrasena, name="EditarContrasena"),
+    path("torneos/inscribirse/<int:pk>", inscribirseTorneo, name="inscribirseTorneo"),
+    path("torneos/desinscribirse/<int:pk>", desinscribirseTorneo, name="desinscribirseTorneo"),
+]
