@@ -60,7 +60,7 @@
                 <div class="col-md-3 mb-4 mt-4">
                     <div id="colVideojuego">
                         <!--  Idea: Usar la función slugify para que en la url los espacios en las palabras salga con un guión. Ej: call-of-duty  -->
-                        <a href="{% url 'Torneos' nombre=videojuego.nombre|slugify %}" id="btnInscribirse" style="text-decoration: none;">
+                        <a href="{% url 'Torneos' nombreVideojuego=videojuego.nombre|slugify %}" id="btnInscribirse" style="text-decoration: none;">
                             <div class="card" id="cardVideojuego" style="background-image: url({{videojuego.imagen.url}}); background-size: cover; width: 100%; height: 200px">
                             </div>
                         </a>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="mt-2">
-                        <p class="text-center"><a href="{% url 'CrearTorneosUsuarios' nombre=videojuego|slugify%}" style="text-decoration: none;">Crear un torneo de {{videojuego}}</a></p>
+                        <p class="text-center"><a href="{% url 'CrearTorneosUsuarios' nombreVideojuego=videojuego|slugify%}" style="text-decoration: none;">Crear un torneo de {{videojuego}}</a></p>
                     </div>
                 </div>
             {% endfor %}

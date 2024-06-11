@@ -59,7 +59,7 @@
                 <div class="col-md-3 p-5 text-center">
                         <h3>{{torneo.nombre}}</h3>
                         <h4>{{torneo.usuarios.count}}/{{torneo.numerojugadores}}</h4>
-                        <a href="{% url 'DetallesTorneo' pk=torneo.pk nombre=torneo.videojuego%}" class="text-center"><button type="button" class="btn btn-proyecto text-center mb-4">Más Información</button></a>
+                        <a href="{% url 'DetallesTorneo' pk=torneo.pk nombreVideojuego=torneo.videojuego|slugify%}" class="text-center"><button type="button" class="btn btn-proyecto text-center mb-4">Más Información</button></a>
                         {% if request.user in torneo.usuarios.all %}
                             <button type="button" class="btn btn-danger text-center btnDesinscribirse" nombreTorneo="{{torneo.nombre}}" id="{{ torneo.id }}">Cancelar Inscripción</button>
                         {% elif torneo.usuarios.count == torneo.numerojugadores %}

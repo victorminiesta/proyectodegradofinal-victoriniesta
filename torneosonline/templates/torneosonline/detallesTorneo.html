@@ -7,10 +7,11 @@
             <div class="row text-center">
                 <div class="col-12">
                     <h3>{{torneo.nombre}}</h3>
-                    {%if not partida%}
+                    {%if not partidas%}
                         <h5>El torneo comenzará el {{torneo.fecha}}</h5>
                     {%else%}
                         <a href="{% url 'Partida' nombre=torneo.videojuego id=torneo.id%}"><button class="btn btn-proyecto">Volver</button></a>
+                    {% endif %}
                     <h5>Número de Jugadores: {{torneo.usuarios.count}}/{{torneo.numerojugadores}}</h5>
                     <h5>Usuarios Inscritos:</h5> 
                     <ul>

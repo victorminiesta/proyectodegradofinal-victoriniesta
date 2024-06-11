@@ -185,13 +185,14 @@ class EditarTorneos(UpdateView):
     
 class DetallesTorneos(DetailView):
     model = Torneo
-    template_name = "torneosonline/detallesTorneo.html"
+    template_name = "torneosonline/DetallesTorneo.html"
     
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["usuarios"] = self.object.usuarios.all()
-        context["partida"] = Partida.objects.filter(torneo=self.object.torneo)
+        # context["partidas"] = Partida.objects.filter(torneo=self.object)
         return context
+
     
 class CrearAmonestacion(CreateView):
     model = Amonestacion
@@ -255,7 +256,7 @@ class Torneos(ListView):
     # Uso el metodo get_queryset para recuperar el objecto videojuego__nombre filtrado por el nombre pasado desde la url
     
     def get_queryset(self):
-        nombre = self.kwargs.get('nombre')
+        nombre = self.kwargs.get('nombreVideojuego')
         nombre = nombre.replace('-', ' ')
         queryset = Torneo.objects.filter(videojuego__nombre = nombre)
         return queryset

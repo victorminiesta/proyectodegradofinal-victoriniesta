@@ -4,9 +4,9 @@ from .views import *
 urlpatterns = [
     path('', Bienvenida, name="Bienvenida"),
     path('videojuegos', Videojuegos.as_view(), name="Videojuegos"),
-    path('<nombre>/Torneos', Torneos.as_view(), name="Torneos"),
-    path('<nombre>/Torneos/<int:pk>', DetallesTorneos.as_view(), name="DetallesTorneo"),
-    path('<nombre>/Torneos/crear', CrearTorneosUsuarios.as_view(), name="CrearTorneosUsuarios"),
+    path('<nombreVideojuego>/Torneos', Torneos.as_view(), name="Torneos"),
+    path('<nombreVideojuego>/Torneos/<int:pk>', DetallesTorneos.as_view(), name="DetallesTorneo"),
+    path('<nombreVideojuego>/Torneos/crear', CrearTorneosUsuarios.as_view(), name="CrearTorneosUsuarios"),
     path('administracion', Administracion, name="AdministracionPrincipal"),
     path('administracion/torneos', AdministrarTorneos.as_view(), name="AdministrarTorneos"),
     path('administracion/torneos/<int:pk>', DetallesTorneoAdministracion.as_view(), name="DetallesTorneoAdministracion"),
