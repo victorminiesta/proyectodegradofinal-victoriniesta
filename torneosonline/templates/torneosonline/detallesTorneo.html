@@ -10,7 +10,7 @@
                     {%if not partidas%}
                         <h5>El torneo comenzará el {{torneo.fecha}}</h5>
                     {%else%}
-                        <a href="{% url 'Partida' nombre=torneo.videojuego id=torneo.id%}"><button class="btn btn-proyecto">Volver</button></a>
+                        <a href="{% url 'Partida' nombre=torneo.videojuego id=torneo.id%}"><button class="btn btn-proyecto">Ver Partida</button></a>
                     {% endif %}
                     <h5>Número de Jugadores: {{torneo.usuarios.count}}/{{torneo.numerojugadores}}</h5>
                     <h5>Usuarios Inscritos:</h5> 
@@ -23,7 +23,7 @@
                     </ul>
                     </h5>
                     <p><Strong>Videojuego:</Strong> {{torneo.videojuego}}</p>
-                    <a href="{% url 'Torneos' nombre=torneo.videojuego%}"><button class="btn btn-proyecto">Volver</button></a>
+                    <a href="{% url 'Torneos' nombreVideojuego=torneo.videojuego|slugify%}"><button class="btn btn-proyecto">Volver</button></a>
                 </div>
             </div>
         </div>
