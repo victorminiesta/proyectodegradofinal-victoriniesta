@@ -153,9 +153,9 @@ class CrearTorneosUsuarios(LoginRequiredMixin, CreateView):
         
         if inscribirsePropio:  
             torneo.videojuego = self.get_queryset()
-            torneo.usuarios.add(usuario)
             torneo.creador = usuario
             torneo.save()
+            torneo.usuarios.add(usuario)
         else:
             torneo.videojuego = self.get_queryset()
             torneo.creador = usuario
