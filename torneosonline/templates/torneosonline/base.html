@@ -26,12 +26,23 @@
 
     <script>
         $(document).ready(function() {
-            $("form *").each(function() {
-                let text = $(this).text().trim();
-                if (text === " [] [] " || text === " [] ") {
-                    $(this).hide();
-                }
-            });
+            function removeBrackets(node) {
+                $(node).contents().each(function() {
+                    if (this.nodeType === Node.TEXT_NODE) {
+                        let trimmedValue = this.nodeValue.trim();
+                        // Eliminar texto que contiene "[]" o "[] []" con espacios entre los corchetes
+                        if (/^\[\](\s+\[\])*$/.test(trimmedValue)) {
+                            $(this).remove();
+                        }
+                    } else {
+                        // Recorrer los nodos hijos
+                        removeBrackets(this);
+                    }
+                });
+            }
+
+            // Iniciar la función de limpieza desde el cuerpo del documento
+            removeBrackets(document.body);
         });
     </script>
     {% block js %}
