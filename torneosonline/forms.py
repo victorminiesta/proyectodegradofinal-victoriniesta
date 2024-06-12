@@ -55,7 +55,7 @@ class formEditarUsuarioAdministracion(UserChangeForm):
     email = forms.EmailField(label="Correo Electrónico", widget=forms.TextInput(attrs={'class': 'form-control'}))
     nombre = forms.CharField(label="Nombre", widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
     apellidos = forms.CharField(label="Apellidos", widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
-    imagen = forms.ImageField(label="Imagen de Perfil", required=False)
+    imagen = forms.ImageField(label="Imagen de Perfil", required=False )
     admin = forms.BooleanField(required=False, label='Administrador', widget=forms.CheckboxInput(attrs={'class': 'btn btn-outline-primary'}))
 
     password = None

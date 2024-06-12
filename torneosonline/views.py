@@ -133,7 +133,7 @@ class CrearTorneosUsuarios(LoginRequiredMixin, CreateView):
         return form
         
     def get_queryset(self):
-        nombre = self.kwargs.get('nombre')
+        nombre = self.kwargs.get('nombreVideojuego')
         nombre = nombre.replace('-', ' ')
         videojuego = Videojuego.objects.get(nombre=nombre)  # Obtener el objeto videojuego
         return videojuego
@@ -149,17 +149,17 @@ class CrearTorneosUsuarios(LoginRequiredMixin, CreateView):
         
         inscribirsePropio = self.request.POST.get('inscribirsePropio')
         torneo = form.save(commit=False)
+        usuario = self.request.user 
         
-        if inscribirsePropio:
-            usuario = self.request.user     
+        if inscribirsePropio:  
             torneo.videojuego = self.get_queryset()
-            torneo.save()
             torneo.usuarios.add(usuario)
             torneo.creador = usuario
+            torneo.save()
         else:
             torneo.videojuego = self.get_queryset()
-            torneo.save()
             torneo.creador = usuario
+            torneo.save()
         return super().form_valid(form)
     
      
