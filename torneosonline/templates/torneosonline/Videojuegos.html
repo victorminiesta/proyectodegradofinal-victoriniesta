@@ -68,11 +68,18 @@
                             <h5>{{videojuego}}</h5>
                         </div>
                     </div>
-                    <div class="mt-2">
-                        <p class="text-center"><a href="{% url 'CrearTorneosUsuarios' nombreVideojuego=videojuego|slugify%}" style="text-decoration: none;">Crear un torneo de {{videojuego}}</a></p>
-                    </div>
+                    {% if request.user.is_authenticated %}
+                        <div class="mt-2">
+                            <p class="text-center"><a href="{% url 'CrearTorneosUsuarios' nombreVideojuego=videojuego|slugify%}" style="text-decoration: none;">Crear un torneo de {{videojuego}}</a></p>
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
+            {% if not request.user.is_authenticated%}
+                <div class="mt-2">
+                    <h5 class="text-center text-danger fs-4">Para poder crear o inscribrse a un torneo debe de estar logueado en nuestra web.</h5>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock content %}

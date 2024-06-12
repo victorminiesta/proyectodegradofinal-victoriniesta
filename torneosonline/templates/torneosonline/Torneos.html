@@ -46,8 +46,10 @@
                 </div>
             {% else %}
                 <div class="col-md-6">
-                    <h4 class="mt-4"><a href="{% url 'login' %}" style="text-decoration: none;">Iniciar sesión</a></h4>
-                    <h4 class="mt-4"><a href="{% url 'Registro' %}" style="text-decoration: none;">Registrarse</a></h4>
+                    <div class="d-flex justify-content-start align-items-start">
+                        <h4 class="mt-4  me-4"><a href="{% url 'login' %}" style="text-decoration: none;">Iniciar sesión</a></h4>
+                        <h4 class="mt-4"><a href="{% url 'Registro' %}" style="text-decoration: none;">Registrarse</a></h4>
+                    </div>
                 </div>
             {% endif %}
         </div>
@@ -69,7 +71,11 @@
                         {% elif torneo.fecha|timeuntil:fechaActual <= '0:30:00' %}
                             <p>Inscripciones cerradas para este torneo</p>
                         {% else %}
-                            <button type="button" class="btn btn-proyecto text-center btnInscribirse {{torneo.nombre}}" nombreTorneo="{{torneo.nombre}}" id="{{ torneo.id }}">Inscribirse</button>
+                            {% if request.user.is_authenticated%}
+                                <button type="button" class="btn btn-proyecto text-center btnInscribirse {{torneo.nombre}}" nombreTorneo="{{torneo.nombre}}" id="{{ torneo.id }}">Inscribirse</button>
+                            {% else %}
+                                <button type="button" class="btn btn-proyecto text-center" onclick="alert('Debes iniciar sesión para inscribirte al torneo.')">Inscribirse</button>
+                            {% endif %}
                         {% endif %}
                         {%if torneo.creador %}
                             <h5 class="text-center mt-3">Creado por {{torneo.creador}}</h5>
@@ -102,7 +108,7 @@
                 })
                 .then((response) => {
                     if (response.ok) {
-                        if (confirm(`Estas a punto de inscribirte al torneo ${nombreTorneo}. Deseas continuar?`)) {
+                        if (confirm(`Estas a punto de inscribirte al torneo ${nombreTorneo}. ¿Deseas continuar?`)) {
                             window.location.href = "{% url 'Videojuegos' %}";
                         }
                     }
@@ -111,7 +117,6 @@
                     }
                 })
                 .catch((error) => {
-                    console.log("Error: " + error);
                     alert("Error al intentar inscribirse al torneo, intentelo de nuevo más tarde.");
                 });
             })
@@ -130,7 +135,7 @@
                 })
                 .then((response) => {
                     if (response.ok) {
-                        if (confirm(`Estas a punto de cancelar tu inscripción al torneo ${nombreTorneo}. Deseas continuar?`)) {
+                        if (confirm(`Estas a punto de cancelar tu inscripción al torneo ${nombreTorneo}. ¿Deseas continuar?`)) {
                             window.location.href = "{% url 'Videojuegos' %}";
                         }
                     }
@@ -139,7 +144,6 @@
                     }
                 })
                 .catch((error) => {
-                    console.log("Error: " + error);
                     alert("Error al intentar desinscribirse al torneo, intentelo de nuevo más tarde.");
                 });
             })
