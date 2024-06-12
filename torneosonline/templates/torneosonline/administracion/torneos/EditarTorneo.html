@@ -2,9 +2,9 @@
 
 {% block content %}
     <div class="container mt-5">
-        <div class="row justify-content-center login-container">
-            <div class="col-md-6 col-sm-8">
-                <div class="card">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card" style="background-color:#1F2833; color:#C5C6C7;">
                     <div class="card-header">
                         <h4 class="text-center">Editar Torneo</h4>
                     </div>
@@ -20,4 +20,22 @@
             </div>
         </div>
     </div>
+
+    <style>
+        #id_usuarios {
+            background-color: #1F2833;
+            color: #C5C6C7;
+            border: none;
+            outline: none;
+            padding: 0.5rem 1rem;
+            width: 100%;
+            border-radius: 0;
+            text-align: center;
+          }
+          
+          #id_usuarios option {
+            background-color: #1F2833;
+            color: #C5C6C7;
+          }
+    </style>
 {% endblock content %}
