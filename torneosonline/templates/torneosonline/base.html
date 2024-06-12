@@ -28,7 +28,7 @@
         $(document).ready(function() {
             $("form *").each(function() {
                 let text = $(this).text().trim();
-                if (text === "[] []" || text === "[]") {
+                if (text === " [] [] " || text === " [] ") {
                     $(this).hide();
                 }
             });
