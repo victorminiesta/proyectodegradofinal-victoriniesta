@@ -26,9 +26,9 @@
 
     <script>
         $(document).ready(function() {
-            $("body *").each(function() {
-                let text = $(this).text();
-                if (text.includes("[] []") || text.includes("[]")) {
+            $("form *").each(function() {
+                let text = $(this).text().trim();
+                if (text === "[] []" || text === "[]") {
                     $(this).hide();
                 }
             });
