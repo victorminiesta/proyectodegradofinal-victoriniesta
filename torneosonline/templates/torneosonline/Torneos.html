@@ -100,25 +100,24 @@
                 const torneoId = boton.id;
                 const nombreTorneo = boton.getAttribute('nombreTorneo');
 
-                fetch('/torneos/inscribirse/'+torneoId, {
-                    method: 'POST',
-                    headers: {
-                        "X-CSRFToken": "{{ csrf_token }}"
-                    }
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        if (confirm(`Estas a punto de inscribirte al torneo ${nombreTorneo}. ¿Deseas continuar?`)) {
-                            window.location.href = "{% url 'Videojuegos' %}";
+                if (confirm(`Estás a punto de inscribirte al torneo ${nombreTorneo}. ¿Deseas continuar?`)) {
+                    fetch('/torneos/inscribirse/' + torneoId, {
+                        method: 'POST',
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
                         }
-                    }
-                    else{
-                        alert("Error al intentar inscribirse al torneo, intentelo de nuevo más tarde.");
-                    }
-                })
-                .catch((error) => {
-                    alert("Error al intentar inscribirse al torneo, intentelo de nuevo más tarde.");
-                });
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            window.location.href = "{% url 'Videojuegos' %}";
+                        } else {
+                            alert("Error al intentar inscribirse al torneo, inténtelo de nuevo más tarde.");
+                        }
+                    })
+                    .catch((error) => {
+                        alert("Error al intentar inscribirse al torneo, inténtelo de nuevo más tarde.");
+                    });
+                }
             })
         })
 
@@ -126,26 +125,26 @@
             boton.addEventListener('click', () => {
                 const torneoId = boton.id;
                 const nombreTorneo = boton.getAttribute('nombreTorneo');
-                
-                fetch('/torneos/desinscribirse/'+torneoId, {
-                    method: 'POST',
-                    headers: {
-                        "X-CSRFToken": "{{ csrf_token }}"
-                    }
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        if (confirm(`Estas a punto de cancelar tu inscripción al torneo ${nombreTorneo}. ¿Deseas continuar?`)) {
+
+                if (confirm(`Estas a punto de cancelar tu inscripción al torneo ${nombreTorneo}. ¿Deseas continuar?`)) {
+                    fetch('/torneos/desinscribirse/'+torneoId, {
+                        method: 'POST',
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        }
+                    })
+                    .then((response) => {
+                        if (response.ok) {
                             window.location.href = "{% url 'Videojuegos' %}";
                         }
-                    }
-                    else{
+                        else{
+                            alert("Error al intentar desinscribirse al torneo, intentelo de nuevo más tarde.");
+                        }
+                    })
+                    .catch((error) => {
                         alert("Error al intentar desinscribirse al torneo, intentelo de nuevo más tarde.");
-                    }
-                })
-                .catch((error) => {
-                    alert("Error al intentar desinscribirse al torneo, intentelo de nuevo más tarde.");
-                });
+                    });
+                }
             })
         })
     </script>
