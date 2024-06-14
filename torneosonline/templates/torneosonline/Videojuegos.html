@@ -16,8 +16,9 @@
             {% if request.user.is_authenticated and request.user.is_staff%}
                 <div class="col-md-6">
                     <div class="d-flex justify-content-end align-items-center me-4">
-                        <P class="text-end fs-3 pt-2">Bienvenido </P>
+                        <P class="text-end fs-3 bienvenidoUsuario">Bienvenido </P>
                         <div class="dropdown">
+                            <!-- uso data-bs-toggle="dropdown" para indicar que el elemento es un menu desplegable y aria-expanded="false" para indicar que esta oculto de primeras el menu-->
                             <button class="btn btn-secondary dropdown-toggle fs-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #1F2833; border-color: #1F2833; color: #C5C6C7;">
                                 {{ request.user.username }}  <img src="{{request.user.imagen.url}}" alt="Imagen de Perfil" style="width:50px; height:50px;">
                             </button>
@@ -31,7 +32,7 @@
             {%elif request.user.is_authenticated and not request.user.is_staff%}
                 <div class="col-md-12">
                     <div class="d-flex justify-content-end align-items-center">
-                        <h3 class="text-end">Bienvenido </h3>
+                        <h3 class="text-end bienvenidoUsuario">Bienvenido </h3>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle fs-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #1F2833; border-color: #1F2833; color: #C5C6C7;">
                                 {{ request.user.username }}  <img src="{{request.user.imagen.url}}" alt="Imagen de Perfil" style="width:40px; height:40px;">
