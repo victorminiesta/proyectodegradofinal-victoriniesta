@@ -383,7 +383,7 @@ def crearPartida(request, pk):
         if not Partida.objects.filter(torneo=torneo).exists():
             usuarios = torneo.usuarios.all()
             
-            if usuarios.count >= 2:
+            if usuarios.count() >= 2:
                 ganador = random.choice(usuarios)
                 nuevaPartida = Partida.objects.create(torneo=torneo, ganador=ganador)
                 nuevaPartida.save()
