@@ -7,10 +7,22 @@
             <div class="row text-center">
                 <div class="col-12">
                     <h3>{{torneo.nombre}}</h3>
-                    {%if not partidas%}
+                    {% if partida %}
+                    <div class="m-5" background-color:#1F2833>
+                        <h5>Partida del Torneo {{ partida.torneo.nombre }}</h5>
+                        {% if partida.ganador == None or partida.ganador == ''%}
+                            <p>No hay ganador.</p>
+                        {%else%}
+                            <p>Ganador: {{ partida.ganador.username }}.</p>
+                        {% endif %}
+                    </div>
+                    {% elif request.user.is_staff and torneo.fecha < fechaActual and torneo.usuarios.count >= 2 %}
                         <h5>El torneo comenzará el {{torneo.fecha}}</h5>
+                        <button class="btn btn-proyecto btnCrearPartida m-3" id="{{ torneo.id }}" nombreVideojuego="{{torneo.videojuego|slugify}}">Comenzar Partida</button>
+                    {% elif  torneo.fecha < fechaActual and not torneo.usuarios.count >= 2%}
+                        <h5>No se inscribieron los suficientes jugadores.</h5>
                     {%else%}
-                        <a href="{% url 'Partida' nombre=torneo.videojuego id=torneo.id%}"><button class="btn btn-proyecto">Ver Partida</button></a>
+                        <h5>El torneo comenzará el {{torneo.fecha}}</h5>
                     {% endif %}
                     <h5>Número de Jugadores: {{torneo.usuarios.count}}/{{torneo.numerojugadores}}</h5>
                     <h5>Usuarios Inscritos:</h5> 
@@ -30,3 +42,36 @@
     </div>  
 
 {% endblock content %}
+
+
+{% block js %}
+    <script>
+        const botonesCrearPartida = document.querySelectorAll('.btnCrearPartida');
+
+        botonesCrearPartida.forEach(boton => {
+            boton.addEventListener('click', () => {
+                const torneoId = boton.id;
+
+                if (confirm(`Estás a punto de crear la partida para el torneo {{torneo.nombre}}. ¿Deseas continuar?`)) {
+                    fetch('/torneos/crearPartida/' + torneoId, {
+                        method: 'POST',
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        }
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            window.location.href = "{% url 'DetallesTorneo' nombreVideojuego=torneo.videojuego|slugify pk=torneo.pk %}";
+                        } else {
+                            alert("Error al intentar crear la partida, inténtelo de nuevo más tarde.");
+                        }
+                    })
+                    .catch((error) => {
+                        alert("Error al intentar crear la partida, inténtelo de nuevo más tarde.");
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock js %}
+    

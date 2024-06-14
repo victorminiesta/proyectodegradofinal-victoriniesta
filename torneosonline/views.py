@@ -182,18 +182,6 @@ class EditarTorneos(UpdateView):
         form.fields['fecha'].widget = DateTimeInput(attrs={'type': 'datetime-local'})
         return form
     
-    
-class DetallesTorneos(DetailView):
-    model = Torneo
-    template_name = "torneosonline/DetallesTorneo.html"
-    
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["usuarios"] = self.object.usuarios.all()
-        # context["partidas"] = Partida.objects.filter(torneo=self.object)
-        return context
-
-    
 class CrearAmonestacion(CreateView):
     model = Amonestacion
     template_name = "torneosonline/administracion/usuarios/CrearAmonestacion.html"
@@ -259,8 +247,24 @@ class Torneos(ListView):
         nombre = self.kwargs.get('nombreVideojuego')
         nombre = nombre.replace('-', ' ')
         queryset = Torneo.objects.filter(videojuego__nombre = nombre)
-        return queryset
+        return queryset   
     
+class DetallesTorneos(DetailView):
+    model = Torneo
+    template_name = "torneosonline/DetallesTorneo.html"
+    
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        torneo = self.object
+        context["usuarios"] = torneo.usuarios.all()
+        context["fechaActual"] = timezone.now()
+        
+        try:
+            partida = Partida.objects.get(torneo=torneo)
+            context["partida"] = partida
+        except Partida.DoesNotExist:
+            context["partida"] = None
+        return context
 class AdministrarVideojuegos(ListView):
     model = Videojuego
     template_name = "torneosonline/administracion/videojuegos/AdministracionVideojuegos.html"
@@ -372,16 +376,34 @@ def desinscribirseTorneo(request, pk):
     return HttpResponse()
 
 
-def crearPartida():
-    torneos = Torneo.objects.filter(fecha=timezone.now())
-    
-    for torneo in torneos:
-        partida = Partida.objects.filter(torneo=torneo).exists()
+def crearPartida(request, pk):
+    if request.method == "POST":
+        torneo = get_object_or_404(Torneo, id=pk)
         
-        if not partida:
+        if not Partida.objects.filter(torneo=torneo).exists():
             usuarios = torneo.usuarios.all()
             
-            if usuarios:
+            if usuarios.count >= 2:
                 ganador = random.choice(usuarios)
                 nuevaPartida = Partida.objects.create(torneo=torneo, ganador=ganador)
                 nuevaPartida.save()
+                return HttpResponse()
+            else:
+                return HttpResponseBadRequest("No hay suficiusuarios inscritos en el torneo.")
+            
+class AdministrarPartidas(ListView):
+    model = Partida
+    template_name = "torneosonline/administracion/partidas/AdministracionPartidas.html"
+    context_object_name = "partidas"
+    
+class EditarPartida(UpdateView):
+    model = Partida
+    template_name = "torneosonline/administracion/partidas/EditarPartida.html"
+    fields = "__all__"
+    success_url = reverse_lazy('AdministrarPartidas')
+    
+def EliminarPartida(request, pk):
+    if request.method == "DELETE":
+        partida = get_object_or_404(Partida, pk=pk)
+        partida.delete() 
+        return HttpResponse()
