@@ -22,7 +22,7 @@ El proyecto de Torneos Online es una plataforma web diseñada para organizar y g
 
 ### Clonar el Repositorio
 ```bash
-git clone https://github.com/ieshm-2daw/proyectointegrado-victorminiesta.git
+git clone https://github.com/ieshm-2daw/Breadcrumbsproyectodegradofinal-victormanueliniesta.git
 ```
 ### Instalar Dependencias
 
