@@ -303,6 +303,8 @@ def EliminarVideojuegos(request, pk):
         videojuego = get_object_or_404(Videojuego, pk=pk)
         Torneo.objects.filter(videojuego=videojuego).delete()
         videojuego.delete()
+        carpeta = settings.MEDIA_ROOT+"perfiles/"+videojuego
+        os.remove(carpeta)
         # Devuelvo una respuesta HTTP con un código de estado 200(ok) por defecto que indica que la solicitud tuvo exito.
         # No necesito hace un return (render) o similar debido a que al hacer la solicitud ajax no necesito redirigir al usuario a una nueva página. 
         return HttpResponse()
@@ -353,6 +355,8 @@ class EditarUsuarioAdministracion(UpdateView):
 def EliminarUsuario(request, pk):
     if request.method == "DELETE":
         usuario = get_object_or_404(Usuario, pk=pk)
+        carpeta = settings.MEDIA_ROOT+"perfiles/"+usuario.username
+        os.remove(carpeta)
         usuario.delete() 
         return HttpResponse()
 

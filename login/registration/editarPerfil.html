@@ -10,10 +10,22 @@
                         <h4 class="text-center">Editar Usuario</h4>
                     </div>
                     <div class="card-body text-center">
-                        <form method="POST" enctype="multipart/form-data">
+                        <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                      
+                            {% if form.instance.imagen %}
+                                <img src="{{ form.instance.imagen.url }}" alt="Imagen de Perfil" width="150"><br>
+                            {% endif %}
+                        
+                            <label for="id_imagen" class="mb-3 mt-2">Subir nueva imagen de perfil:</label>
+                            <input type="file" name="imagen" id="id_imagen" class="form-control mb-3">
+                        
+                            <p>{{ form.username.label_tag }} {{ form.username }}</p>
+                            <p>{{ form.email.label_tag }} {{ form.email }}</p>
+                            <p>{{ form.nombre.label_tag }} {{ form.nombre }}</p>
+                            <p>{{ form.apellidos.label_tag }} {{ form.apellidos }}</p>
+                        
+                            <button type="submit"  class="btn btn-primary">Guardar Cambios</button>
                             <a href="{%url 'Perfil'%}" class="btn btn-danger">Cancelar</a>
                         </form>
                     </div>
