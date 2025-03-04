@@ -22,7 +22,11 @@
                             <button type="submit" class="btn btn-primary btn-block mt-4">Iniciar Sesión</button>
                             <a href="{%url 'Videojuegos'%}" class="btn btn-danger mt-4">Volver</a>
                         </form>
+                        {% if form.non_field_errors %}
+                            <p>{{ form.non_field_errors }}</p>
+                        {% endif %}
                     </div>
+
                 </div>
             </div>
         </div>

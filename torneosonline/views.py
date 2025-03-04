@@ -9,7 +9,7 @@ from typing import Any
 from django.views.generic import CreateView, DeleteView, DetailView, UpdateView, ListView
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.forms import BaseModelForm, DateTimeInput, TextInput, NumberInput
 from .forms import RegistroUsuarios, EditarUsuario, formCrearUsuariosAdministrador, formEditarUsuarioAdministracion
 from django.contrib.auth import login
@@ -18,6 +18,7 @@ from django.contrib.auth.hashers import make_password
 from urllib.parse import urlencode
 from django.contrib.auth.forms import SetPasswordForm
 import os
+import shutil
 import random
 from django.conf import settings
 from django.contrib import messages
@@ -355,10 +356,21 @@ class EditarUsuarioAdministracion(UpdateView):
 def EliminarUsuario(request, pk):
     if request.method == "DELETE":
         usuario = get_object_or_404(Usuario, pk=pk)
-        carpeta = settings.MEDIA_ROOT+"perfiles/"+usuario.username
-        os.remove(carpeta)
-        usuario.delete() 
-        return HttpResponse()
+
+        # Ruta de la carpeta del usuario
+        carpeta = os.path.join(settings.MEDIA_ROOT, "perfiles", usuario.username)
+
+        # Verificar si la carpeta existe antes de eliminarla
+        if os.path.exists(carpeta):
+            try:
+                shutil.rmtree(carpeta)  # Eliminar la carpeta y su contenido
+            except PermissionError:
+                return JsonResponse({"error": "No se pudo eliminar la carpeta del usuario."}, status=500)
+
+        usuario.delete()  # Eliminar el usuario de la base de datos
+        return JsonResponse({"mensaje": "Usuario eliminado correctamente."}, status=200)
+
+    return JsonResponse({"error": "Método no permitido."}, status=405)
 
 
 def inscribirseTorneo(request, pk):

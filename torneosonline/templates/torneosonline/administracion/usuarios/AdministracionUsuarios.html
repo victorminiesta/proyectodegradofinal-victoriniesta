@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 {% for usuario in usuarios %}
-                <tr class="text-center">
+                <tr class="text-center" id="usuario-{{usuario.pk}}">
                     <td class="text-center"><img src="{{ usuario.imagen.url }}" alt="{{ usuario.username }}" width="50" height="50"></td>
                     <td class="text-center">{{ usuario.username }}</td>
                     <td class="text-center">{{ usuario.email }}</td>
@@ -87,7 +87,7 @@
                     })
                     .then((response) => {
                         if (response.ok) {
-                            window.location.href = "{% url 'AdministrarUsuarios' %}";
+                            document.getElementById(`usuario-${usuarioId}`).remove();
                         }
                         else{
                             alert("No se pudo eliminar al usuario.");
